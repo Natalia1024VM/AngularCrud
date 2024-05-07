@@ -1,60 +1,120 @@
-<div style="width:70%; margin: 40px auto;">
-  <h1>Lista de Materias</h1>
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div>
+  <app-menu></app-menu>
   
-      <!-- Position Column -->
-      <ng-container matColumnDef="Id">
-        <th mat-header-cell *matHeaderCellDef> Código Materia</th>
-        <td mat-cell *matCellDef="let element"> {{element.idSubject}} </td>
-      </ng-container>
-  
-      <!-- Name Column -->
-      <ng-container matColumnDef="Nombre">
-        <th mat-header-cell *matHeaderCellDef> Nombre Materia </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
-  
-      <!-- Weight Column -->
-      <ng-container matColumnDef="Profesor">
-        <th mat-header-cell *matHeaderCellDef> Profesor </th>
-        <td mat-cell *matCellDef="let element"> {{element.teacher}} </td>
-      </ng-container>
-  
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="FechaCreacion">
-        <th mat-header-cell *matHeaderCellDef> Fecha Creacion </th>
-        <td mat-cell *matCellDef="let element"> {{element.dateCreate}} </td>
-      </ng-container>
-  
-      
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="UsuarioCreacion">
-        <th mat-header-cell *matHeaderCellDef> Usuario Creacion </th>
-        <td mat-cell *matCellDef="let element"> {{element.usrCreate}} </td>
-      </ng-container>
-  
-      
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="FechaModificacion">
-        <th mat-header-cell *matHeaderCellDef> Fecha Modificacion </th>
-        <td mat-cell *matCellDef="let element"> {{element.dateModify}} </td>
-      </ng-container>
-      
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="Estado">
-        <th mat-header-cell *matHeaderCellDef> Estado</th>
-        <td mat-cell *matCellDef="let element"> {{element.asset}} </td>
-      </ng-container>
-  
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                   showFirstLastButtons
-                   aria-label="Select page of periodic elements">
-    </mat-paginator>
+  <div style="width:80%; margin: 40px auto;">
+    <h1>Lista de Materias</h1>
+    <mat-accordion >
+      <mat-expansion-panel (opened)="panelOpenState = true"
+                           (closed)="panelOpenState = false" style="width: 400px;">
+        <mat-expansion-panel-header style="background-color: rgb(8, 57, 57); color: white; ">
+          <mat-panel-title style="color: white;">
+            Adicionar materia
+          </mat-panel-title>
+          <!-- <mat-panel-description>
+            Currently I am {{panelOpenState ? 'open' : 'closed'}}
+          </mat-panel-description> -->
+        </mat-expansion-panel-header>
+        <br/>
+        <form class="example-form">
+          <mat-form-field class="example-full-width">
+            <mat-label>Materia</mat-label>
+            <input type="Nombre" matInput [formControl]="NombreFormControl" [errorStateMatcher]="matcher">
+            @if (NombreFormControl.hasError('Materia') && !NombreFormControl.hasError('required')) {
+              <mat-error>Por favor ingrese una materia valido</mat-error>
+            }
+            @if (NombreFormControl.hasError('required')) {
+              <mat-error>Materia <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <mat-label>Profesor</mat-label>
+            <input type="profesor" matInput [formControl]="ProfesorFormControl" [errorStateMatcher]="matcher">
+            @if (ProfesorFormControl.hasError('Profesor') && !ProfesorFormControl.hasError('required')) {
+              <mat-error>Por favor ingrese el nombre del profesor</mat-error>
+            }
+            @if (NombreFormControl.hasError('required')) {
+              <mat-error>Profesor <strong>required</strong></mat-error>
+            }
+          </mat-form-field>
+          <br/>
+          <br/>
+          <button mat-raised-button style="background-color: rgb(8, 57, 57); color: white;">Adicionar</button>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <br/>
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+    </mat-form-field>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
+    
+        <!-- Position Column -->
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef> Código</th>
+          <td mat-cell *matCellDef="let element"> {{element.idSubject}} </td>
+        </ng-container>
+    
+        <!-- Name Column -->
+        <ng-container matColumnDef="Nombre">
+          <th mat-header-cell *matHeaderCellDef> Nombre Materia </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+    
+        <!-- Weight Column -->
+        <ng-container matColumnDef="Profesor">
+          <th mat-header-cell *matHeaderCellDef> Profesor </th>
+          <td mat-cell *matCellDef="let element"> {{element.teacher}} </td>
+        </ng-container>
+    
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="FechaCreacion">
+          <th mat-header-cell *matHeaderCellDef> Fecha Creacion </th>
+          <td mat-cell *matCellDef="let element"> {{element.dateCreate}} </td>
+        </ng-container>
+    
+        
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="UsuarioCreacion">
+          <th mat-header-cell *matHeaderCellDef> Usuario Creacion </th>
+          <td mat-cell *matCellDef="let element"> {{element.usrCreate}} </td>
+        </ng-container>
+    
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="FechaModificacion">
+          <th mat-header-cell *matHeaderCellDef> Fecha Modificacion </th>
+          <td mat-cell *matCellDef="let element"> {{element.dateModify}} </td>
+        </ng-container>      
+        
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="Estado">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-mini-fab matTooltip="primary" color="primary">
+              <mat-icon fontIcon="edit"></mat-icon>
+            </button>
+            <button mat-mini-fab matTooltip="Warn" color="warn">
+              <mat-icon fontIcon="delete"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>  
+
   </div>
+
 </div>

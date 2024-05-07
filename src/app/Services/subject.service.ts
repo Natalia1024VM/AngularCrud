@@ -21,6 +21,7 @@ export class SubjectService {
       //return this.http.get<Subject[]>(this.apiUrl, { headers: new HttpHeaders({'Authorization': 'Bearer ' + this.token  })});
       var respuesta= this.http.get<Subject[]>(this.apiUrl);
 
+      console.log(respuesta);
       return  respuesta ;
     }
 

@@ -1,9 +1,26 @@
 import {AfterViewInit, Component, ViewChild, OnInit} from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+
+import {ErrorStateMatcher} from '@angular/material/core';
+
 
 import { Subject } from './Interfaces/subject';
 import { SubjectService } from './Services/subject.service';
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-root',
@@ -11,7 +28,10 @@ import { SubjectService } from './Services/subject.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements AfterViewInit, OnInit {
-  //title = 'ProyectoAngular';
+  panelOpenState = false;
+  NombreFormControl = new FormControl('', [Validators.required]);
+  ProfesorFormControl=  new FormControl('', [Validators.required]);
+  matcher = new MyErrorStateMatcher();
   displayedColumns: string[] = ['Id', 'Nombre', 'Profesor', 'FechaCreacion', 'UsuarioCreacion', 'FechaModificacion', 'Estado'];
   dataSource = new MatTableDataSource<Subject>();
 
@@ -27,6 +47,20 @@ export class AppComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  VentanaMaterias()
+  {
+
+  }
+  VentanaEstudiantes()
+  {
+
+  }
+
+
 
   mostarSubject()
   {
@@ -41,7 +75,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           } else {
             console.log( 'dato' );
 
-              this.dataSource = new MatTableDataSource(response.cedis);
+              this.dataSource = new MatTableDataSource(response);
               
           }
       },
